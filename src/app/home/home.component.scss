@@ -1,0 +1,31 @@
+.container {
+  text-align: center;
+  padding: 1em;
+}
+
+.logo {
+  width: 150px;
+  margin: 0 auto;
+}
+
+q {
+  font-style: italic;
+  quotes: "« "" »";
+}
+
+ngx-dropzone {
+  margin: 20px;
+
+  &.custom-dropzone {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
+    margin: 0;
+    min-height: 340px;
+
+    &.hovered {
+      border-style: solid;
+    }
+  }
+}

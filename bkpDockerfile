@@ -1,0 +1,30 @@
+FROM node:10
+
+LABEL Maintainer = Hernan De Souza
+LABEL Name = Sinapsis Technical Angular App
+
+# #############################################################################
+# Cache layer with package.json for node_modules
+#
+ADD package.json package-lock.json ./tmp/
+RUN cd /tmp && npm i npm@latest -g && npm install && npm i -g nodemon && npm i -g @angular/cli@1.7.1
+RUN mkdir -p /usr/src/app && cp -a /tmp/node_modules /usr/src/app
+
+# #############################################################################
+# Application Code
+#
+COPY . /usr/src/app
+
+# #############################################################################
+# Expose
+#
+WORKDIR /usr/src/app
+EXPOSE 4200
+
+CMD npm run start
+
+# #############################################################################
+# Start dev server with polling for Windows
+#
+# ENTRYPOINT ["/bin/bash", "-c", "if [ \"$ENABLE_POLLING\" = \"enabled\" ]; \
+# then npm run start:docker:poll; else npm run start:docker; fi"]
