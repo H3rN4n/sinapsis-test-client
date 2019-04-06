@@ -58,9 +58,9 @@ export class AuthenticationService {
   }
 
   constructor(private router: Router) {
-    this._idToken = null;
-    this._accessToken = null;
-    this._expiresAt = 0;
+    this._idToken = localStorage.getItem('_idToken');
+    this._accessToken = localStorage.getItem('_accessToken');
+    this._expiresAt = parseInt(localStorage.getItem('_expiresAt'));
 
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
@@ -89,6 +89,10 @@ export class AuthenticationService {
     this._idToken = '';
     this._expiresAt = 0;
 
+    localStorage.setItem('_accessToken', '')
+    localStorage.setItem('_idToken', '')
+    localStorage.setItem('_expiresAt', '0')
+
     this.auth0.logout({
       returnTo: '/'
     });
@@ -101,6 +105,7 @@ export class AuthenticationService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult);
         this.getProfile((err: any, profile: any) => {
+          localStorage.setItem('userProfile', profile)
           this.userProfile = profile;
         });
 
@@ -119,6 +124,10 @@ export class AuthenticationService {
     this._accessToken = authResult.accessToken;
     this._idToken = authResult.idToken;
     this._expiresAt = expiresAt;
+
+    localStorage.setItem('_accessToken', this._accessToken)
+    localStorage.setItem('_idToken', this._idToken)
+    localStorage.setItem('_expiresAt', this._expiresAt.toString())
   }
 
   public renewTokens(): void {

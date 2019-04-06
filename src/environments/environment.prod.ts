@@ -4,7 +4,8 @@ import env from './.env';
 export const environment = {
   production: true,
   version: env.npm_package_version,
-  serverUrl: 'https://api.chucknorris.io',
+  serverUrl: 'https://8yj66r5cld.execute-api.us-east-1.amazonaws.com/dev/',
   defaultLanguage: 'en-US',
-  supportedLanguages: ['en-US', 'fr-FR']
+  supportedLanguages: ['en-US', 'fr-FR'],
+  auth0CallbackUrl: "http://sinapsis-test.s3-website-us-east-1.amazonaws.com/callback"
 };

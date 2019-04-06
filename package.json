@@ -18,7 +18,11 @@
     "prettier:check": "prettier --list-different \"./{src,e2e}/**/*.{ts,js,scss}\"",
     "postinstall": "npm run prettier -s",
     "precommit": "pretty-quick --staged",
-    "generate": "ng generate"
+    "generate": "ng generate",
+    "docker-img": "docker build -t sinapsis-client .",
+    "docker-run": "docker run -it -v ${PWD}:/usr/src/app -p 4200:4200 sinapsis-client:latest",
+    "aws-config": "aws config --key AKIAX6RU7WLHKZF6Y2XX --secret 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",
+    "deploy-s3": "npm run build --prod && sudo aws s3 sync ./dist s3://sinapsis-test --acl public-read"
   },
   "dependencies": {
     "@angular/animations": "^7.0.0",
