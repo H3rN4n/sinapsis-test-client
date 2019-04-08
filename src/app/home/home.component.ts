@@ -1,18 +1,12 @@
+import { MoveStep, AddThumbsListItem } from './home.actions';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { finalize } from 'rxjs/operators';
+import { Select, Store } from '@ngxs/store';
+import { HomeState } from './home.state';
 
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
-
-export interface ThumbsResult {
-  date: Date;
-  title: string;
-  files: ThumbsResultFiles[];
-}
-
-export interface ThumbsResultFiles {
-  name: string;
-  url: string;
-}
+import { WebcamImage } from 'ngx-webcam';
+import { Observable, Subject } from 'rxjs';
+import { ThumbsItem, HomeModel } from './home.models';
 
 @Component({
   selector: 'app-home',
@@ -23,68 +17,68 @@ export class HomeComponent implements OnInit {
   @ViewChild('cropper', undefined)
   cropper: ImageCropperComponent;
 
-  isLoading: boolean;
-  data: any;
+  @Select(HomeState) home$: Observable<HomeModel>;
 
-  // Components UX steps list:
-  //  selecting-file
-  //  cropping-image
-  //  previewing-cropped-image
-  //  uploading-cropped-image
+  public cropperImage: any;
+  public webcamImage: WebcamImage = null;
+  private trigger: Subject<void> = new Subject<void>();
 
-  step: string;
-  cropperSettings: CropperSettings;
+  constructor(private store: Store) {
+    this.cropperImage = {};
+  }
 
-  //thumbs list
-  thumbs: ThumbsResult[];
-
-  constructor() {
-    this.cropperSettings = new CropperSettings();
-    this.cropperSettings.noFileInput = true;
-    this.cropperSettings.width = 400;
-    this.cropperSettings.height = 300;
-    this.cropperSettings.croppedWidth = 400;
-    this.cropperSettings.croppedHeight = 300;
-    this.cropperSettings.canvasWidth = 400;
-    this.cropperSettings.canvasHeight = 300;
-
-    this.data = {};
-    this.thumbs = [];
-    this.step = 'selecting-file';
+  moveStep(moveTo: string){
+    this.store.dispatch(new MoveStep(moveTo))
   }
 
   onFilesAdded(files: File[]) {
-    // var image:any = new Image();
     var image: any = new Image();
 
     files.forEach(file => {
       const reader = new FileReader();
 
-      reader.onload = (e: ProgressEvent) => {
-        const content = (e.target as FileReader).result;
+      // reader.onload = (e: ProgressEvent) => {
+      //   const content = (e.target as FileReader).result;
 
-        // this content string could be used as an image source
-        // or be uploaded to a webserver via HTTP.
-      };
+      //   // this content string could be used as an image source
+      //   // or be uploaded to a webserver via HTTP.
+      // };
 
       reader.onloadend = (loadEvent: any) => {
-        this.step = 'cropping-image';
         image.src = loadEvent.target.result;
         this.cropper.setImage(image);
+        this.store.dispatch(new MoveStep('cropping-image'))
       };
 
-      // use this for basic text files like .txt or .csv
-      // reader.readAsText(file);
-
-      // use this for images
       reader.readAsDataURL(file);
     });
   }
 
   ngOnInit() {}
 
+  public handleImage(webcamImage: WebcamImage): void {
+    console.log('received webcam image', webcamImage);
+    this.webcamImage = webcamImage;
+
+    var image = new Image();
+    image.src = webcamImage.imageAsDataUrl;
+
+    if(webcamImage){
+      this.cropper.setImage(image);
+      this.store.dispatch(new MoveStep('cropping-image'))
+    }
+  }
+
+  public triggerSnapshot(): void {
+    this.trigger.next();
+  }
+
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+
   uploadCroppedImage() {
-    this.step = 'uploading-cropped-image';
+    this.store.dispatch(new MoveStep('uploading-cropped-image'))
 
     //TODO: USE RXJS
     const thumbsResult = {
@@ -96,7 +90,7 @@ export class HomeComponent implements OnInit {
           url: 'https://cdn.newsapi.com.au/image/v1/67a523605bca40778c6faaad93883a3b'
         },
         {
-          name: '320x320',
+          name: '400x300',
           url: 'https://cdn.newsapi.com.au/image/v1/67a523605bca40778c6faaad93883a3b'
         },
         {
@@ -111,9 +105,8 @@ export class HomeComponent implements OnInit {
     };
 
     setTimeout(() => {
-      console.log(this.thumbs)
-      this.thumbs.push(thumbsResult);
-      this.step = 'selecting-file';
+      //this.thumbs.push(thumbsResult);
+      this.store.dispatch(new AddThumbsListItem(thumbsResult))
     }, 500);
   }
 }

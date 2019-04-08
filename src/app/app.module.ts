@@ -6,6 +6,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
+import { NgxsModule } from '@ngxs/store';
 
 import { environment } from '@env/environment';
 import { CoreModule } from '@app/core';
@@ -26,6 +27,7 @@ import { AppRoutingModule } from './app-routing.module';
     TranslateModule.forRoot(),
     BrowserAnimationsModule,
     MaterialModule,
+    NgxsModule.forRoot([]),
     CoreModule,
     SharedModule,
     ShellModule,

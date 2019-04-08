@@ -1,41 +1,47 @@
 <div class="container" fxLayout="column" fxLayoutAlign="start start" style="min-height: 500px;">
   <h2 class="mat-h2">Thumbnails Creator</h2>
-  <div fxFill fxFlex="100%" fxFlex.lt-md="100%" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutAlign="start start"
-    fxLayoutGap="20px">
-    <mat-card fxFill fxFlex.gt-md="50%" fxFlex.lt-md="100%">
-      <!--
-        //  selecting-file
-        //  cropping-image
-        //  previewing-cropped-image
-        //  uploading-cropped-image
-       -->
+  <div fxFill fxFlex="100%" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutAlign="start start" fxLayoutGap="20px">
+    <mat-card fxFill fxFlex="100%">
       <mat-card-content>
-        <div [ngSwitch]="step">
+        <div [ngSwitch]="(home$ | async).step">
           <!-- STEP: Selecting File -->
           <div *ngSwitchCase="'selecting-file'">
-            <ngx-dropzone class="custom-dropzone" [showImagePreviews]="false" (filesAdded)="onFilesAdded($event)" [maxFileSize]="50000"
+            <ngx-dropzone class="custom-dropzone" [showImagePreviews]="false" (filesAdded)="onFilesAdded($event)"
               [accept]="'image/png,image/jpeg'"></ngx-dropzone>
+            <button fxFill mat-raised-button (click)="moveStep('take-a-snapshot')">Take a snapshot</button>
           </div>
 
+          <!-- STEP: Take a Snapshot -->
+          <div [hidden]="(home$ | async).step !== 'take-a-snapshot'">
+            <webcam fxFill [height]="(home$ | async).cropper.settings.croppedHeight"
+              [width]="(home$ | async).cropper.settings.croppedWidth" [trigger]="triggerObservable"
+              (imageCapture)="handleImage($event)" *ngSwitchCase="'take-a-snapshot'" [videoOptions]="videoOptions"
+              [imageQuality]="1" (initError)="handleInitError($event)"></webcam>
+
+            <button mat-raised-button fxFill class="actionBtn" (click)="triggerSnapshot();">Take</button>
+            <button mat-raised-button fxFill (click)="moveStep('selecting-file')">Cancel</button>
+          </div>
           <!-- STEP: Cropping Image -->
-          <div [hidden]="step !== 'cropping-image'">
-            <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
-            <button mat-button (click)="step = 'previewing-cropped-image'">Preview Selection</button>
-            <button mat-button (click)="step = 'selecting-file'">New File</button>
+          <div [hidden]="(home$ | async).step !== 'cropping-image'">
+            <img-cropper #cropper fxFill [image]="cropperImage" [settings]="(home$ | async).cropper.settings">
+            </img-cropper>
+            <button mat-raised-button fxFill (click)="moveStep('previewing-cropped-image')">Preview Selection</button>
+            <button mat-raised-button fxFill (click)="moveStep('selecting-file')">New File</button>
           </div>
 
           <!-- STEP: Previewing Cropped Image -->
           <div *ngSwitchCase="'previewing-cropped-image'">
-            <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight" />
-            <button mat-button (click)="uploadCroppedImage()">Generate Thumbs</button>
-            <button mat-button (click)="step = 'cropping-image'">Crop Again</button>
+            <img [src]="cropperImage.image" [width]="(home$ | async).cropper.settings.croppedWidth"
+              [height]="(home$ | async).cropper.settings.croppedHeight" />
+            <button mat-raised-button fxFill (click)="uploadCroppedImage()">Generate Thumbs</button>
+            <button mat-raised-button fxFill (click)="moveStep('cropping-image')">Crop Again</button>
           </div>
 
           <!-- STEP: Uploading Cropped Image -->
           <div *ngSwitchCase="'uploading-cropped-image'">
             <div fxFill fxLayout="column" fxLayoutAlign="center center">
-                <h4 class="mat-h4">Generating Thumbs:</h4>
-                <mat-spinner></mat-spinner>
+              <h4 class="mat-h4">Generating Thumbs:</h4>
+              <mat-spinner></mat-spinner>
             </div>
           </div>
         </div>
@@ -44,23 +50,29 @@
 
     </mat-card>
 
-    <div fxFlex.gt-md="50%" fxFlex.lt-md="100%" fxLayout="column" fxLayoutAlign="start start">
+    <div fxFlex="100%" fxLayout="column" fxLayoutAlign="start start">
       <h3 class="mat-h3">Your Thumbnails:</h3>
-      <p class="mat-h4" *ngIf="!thumbs.length">Your thumbs will appear here.</p>
-      <mat-accordion fxFill *ngIf="thumbs.length">
+      <p class="mat-h4" *ngIf="!(home$ | async).thumbs.length">Your thumbs will appear here.</p>
+      <mat-accordion fxFlex="100%" fxFill *ngIf="(home$ | async).thumbs.length">
 
-        <mat-expansion-panel *ngFor="let thumb of thumbs; let i = index">
+        <mat-expansion-panel fxFlex="100%" fxFill  *ngFor="let thumb of (home$ | async).thumbs; let i = index">
+
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <img style="display: block; max-height: 30px; max-width: 30px;"
-                [src]="thumb.files[3].url" alt="">
+              <img style="display: block; max-height: 30px; max-width: 30px;" [src]="thumb.files[3].url" alt="">
             </mat-panel-title>
             <mat-panel-description>
-              Image Created At: 1 minute ago
+              {{ thumb.title }}
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <a *ngFor="let file of thumb.files; let i = index" [href]="file.url" target="_blank"> {{file.name}}</a>
+          <div fxFlex="100%" fxFill fxLayout="column">
+            <mat-list>
+              <mat-list-item *ngFor="let file of thumb.files; let i = index">
+                <a [href]="file.url" target="_blank"> {{file.name}}</a>
+              </mat-list-item>
+            </mat-list>
+          </div>
         </mat-expansion-panel>
 
 
