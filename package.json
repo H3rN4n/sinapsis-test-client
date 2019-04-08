@@ -21,7 +21,7 @@
     "generate": "ng generate",
     "docker-img": "docker build -t sinapsis-client .",
     "docker-run": "docker run -it -v ${PWD}:/usr/src/app -p 4200:4200 sinapsis-client:latest",
-    "aws-config": "aws config --key AKIAX6RU7WLHKZF6Y2XX --secret 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",
+    "aws-config": "aws config --key AAA --secret BBB",
     "deploy-s3": "npm run build --prod && sudo aws s3 sync ./dist s3://sinapsis-test --acl public-read"
   },
   "dependencies": {

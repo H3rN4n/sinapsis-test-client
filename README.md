@@ -16,6 +16,11 @@ version 5.3.0
  docker build -t sinapsis-client .
  docker run -it -v ${PWD}:/usr/src/app -p 4200:4200 sinapsis-client
  ```
+# Deploy To S3 Bucket
+```sh
+ npm run aws-config
+ npm run deploy-s3
+ ```
 
 # Project structure
 
