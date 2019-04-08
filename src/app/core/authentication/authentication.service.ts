@@ -6,8 +6,16 @@ import { Router } from '@angular/router';
 
 export interface Credentials {
   // Customize received credentials here
-  username: string;
-  token: string;
+  email: string;
+  email_verified: Boolean;
+  family_name: string;
+  given_name: string;
+  locale: string;
+  name: string;
+  nickname: string;
+  picture: string;
+  sub: string;
+  updated_at: string;
 }
 
 const credentialsKey = 'credentials';
@@ -89,9 +97,9 @@ export class AuthenticationService {
     this._idToken = '';
     this._expiresAt = 0;
 
-    localStorage.setItem('_accessToken', '')
-    localStorage.setItem('_idToken', '')
-    localStorage.setItem('_expiresAt', '0')
+    localStorage.setItem('_accessToken', '');
+    localStorage.setItem('_idToken', '');
+    localStorage.setItem('_expiresAt', '0');
 
     this.auth0.logout({
       returnTo: '/'
@@ -105,11 +113,10 @@ export class AuthenticationService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult);
         this.getProfile((err: any, profile: any) => {
-          localStorage.setItem('userProfile', profile)
-          this.userProfile = profile;
+          console.log(err, profile);
+          this.setCredentials(profile);
+          this.router.navigate(['/home']);
         });
-
-        this.router.navigate(['/home']);
       } else if (err) {
         console.log(err);
         this.router.navigate(['/login']);
@@ -125,9 +132,9 @@ export class AuthenticationService {
     this._idToken = authResult.idToken;
     this._expiresAt = expiresAt;
 
-    localStorage.setItem('_accessToken', this._accessToken)
-    localStorage.setItem('_idToken', this._idToken)
-    localStorage.setItem('_expiresAt', this._expiresAt.toString())
+    localStorage.setItem('_accessToken', this._accessToken);
+    localStorage.setItem('_idToken', this._idToken);
+    localStorage.setItem('_expiresAt', this._expiresAt.toString());
   }
 
   public renewTokens(): void {
@@ -155,12 +162,7 @@ export class AuthenticationService {
     if (!this._accessToken) {
       throw new Error('Access token must exist to fetch profile');
     }
-
-    const self = this;
     this.auth0.client.userInfo(this._accessToken, (err, profile) => {
-      if (profile) {
-        self.userProfile = profile;
-      }
       cb(err, profile);
     });
   }
@@ -172,12 +174,11 @@ export class AuthenticationService {
    * @param credentials The user credentials.
    * @param remember True to remember credentials across sessions.
    */
-  private setCredentials(credentials?: Credentials, remember?: boolean) {
+  private setCredentials(credentials?: Credentials) {
     this._credentials = credentials || null;
 
     if (credentials) {
-      const storage = remember ? localStorage : sessionStorage;
-      storage.setItem(credentialsKey, JSON.stringify(credentials));
+      localStorage.setItem(credentialsKey, JSON.stringify(credentials));
     } else {
       sessionStorage.removeItem(credentialsKey);
       localStorage.removeItem(credentialsKey);

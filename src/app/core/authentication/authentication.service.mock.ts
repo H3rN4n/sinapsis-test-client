@@ -4,14 +4,30 @@ import { Credentials } from './authentication.service';
 
 export class MockAuthenticationService {
   credentials: Credentials | null = {
-    username: 'test',
-    token: '123'
+    email: 'test@email.com',
+    email_verified: true,
+    family_name: 'Test',
+    given_name: 'Test',
+    locale: 'es',
+    name: 'Test',
+    nickname: 'test',
+    picture: 'testimg',
+    sub: 'test',
+    updated_at: ''
   };
 
   login(context: any): Observable<Credentials> {
     return of({
-      username: context.username,
-      token: '123456'
+      email: context.email,
+      email_verified: context.email_verified,
+      family_name: context.family_name,
+      given_name: context.given_name,
+      locale: context.locale,
+      name: context.name,
+      nickname: context.nickname,
+      picture: context.picture,
+      sub: context.sub,
+      updated_at: context.updated_at
     });
   }
 
