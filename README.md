@@ -7,12 +7,14 @@ version 5.3.0
 
 1. Launch development server, and open `localhost:4200` in your browser:
  ```sh
- docker run -it -v ${PWD}:/usr/src/app -p 4200:4200 sinapsis-client
+ npm install
+ npm start
  ```
 
 # Build a new docker image
 ```sh
  docker build -t sinapsis-client .
+ docker run -it -v ${PWD}:/usr/src/app -p 4200:4200 sinapsis-client
  ```
 
 # Project structure
