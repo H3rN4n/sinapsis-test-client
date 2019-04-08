@@ -1,4 +1,4 @@
-import { MoveStep, AddThumbsListItem } from './home.actions';
+import { MoveStep, AddThumbsListItem, UploadFile } from './home.actions';
 import { State, Action, StateContext } from '@ngxs/store';
 import { CropperSettings } from 'ngx-img-cropper';
 import { HomeModel } from './home.models';
@@ -31,11 +31,48 @@ export class HomeState {
   @Action(MoveStep)
   MoveStep(ctx: StateContext<HomeModel>, action: MoveStep) {
     const state = ctx.getState();
-    console.log(action, ctx)
     ctx.setState({
       ...state,
       step: action.moveTo
     });
+  }
+
+  @Action(UploadFile)
+  UploadFile(ctx: StateContext<HomeModel>, action: UploadFile) {
+    const state = ctx.getState();
+
+    //upload service
+
+    // ctx.setState({
+    //   ...state,
+    //   thumbs: state.thumbs.concat(action.file)
+    // });
+    //then
+
+    const thumbsResult = {
+      date: new Date(),
+      title: 'New Thumbs',
+      files: [
+        {
+          name: 'Original',
+          url: action.file
+        },
+        {
+          name: '400x300',
+          url: action.file
+        },
+        {
+          name: '160x120',
+          url: action.file
+        },
+        {
+          name: '120x120',
+          url: action.file
+        }
+      ]
+    };
+
+    return ctx.dispatch(new AddThumbsListItem(thumbsResult));
   }
 
   @Action(AddThumbsListItem)

@@ -1,0 +1,7 @@
+<div fxFlex="100%" fxFill fxLayout="column">
+  <mat-list>
+    <mat-list-item *ngFor="let file of thumb.files; let i = index">
+      <a [href]="file.url" target="_blank"> {{file.name}}</a>
+    </mat-list-item>
+  </mat-list>
+</div>

@@ -13,6 +13,9 @@ import { ImageCropperModule } from 'ngx-img-cropper';
 import { WebcamModule } from 'ngx-webcam';
 
 import { HomeComponent } from './home.component';
+import { ThumbsListComponent } from './thumbs-list/thumbs-list.component';
+import { ThumbsListItemComponent } from './thumbs-list-item/thumbs-list-item.component';
+
 import { HomeState } from './home.state';
 
 @NgModule({
@@ -29,7 +32,7 @@ import { HomeState } from './home.state';
     ImageCropperModule,
     WebcamModule
   ],
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, ThumbsListComponent, ThumbsListItemComponent],
   providers: []
 })
 export class HomeModule {}

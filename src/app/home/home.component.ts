@@ -1,4 +1,4 @@
-import { MoveStep, AddThumbsListItem } from './home.actions';
+import { MoveStep, AddThumbsListItem, UploadFile } from './home.actions';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { HomeState } from './home.state';
@@ -37,13 +37,6 @@ export class HomeComponent implements OnInit {
     files.forEach(file => {
       const reader = new FileReader();
 
-      // reader.onload = (e: ProgressEvent) => {
-      //   const content = (e.target as FileReader).result;
-
-      //   // this content string could be used as an image source
-      //   // or be uploaded to a webserver via HTTP.
-      // };
-
       reader.onloadend = (loadEvent: any) => {
         image.src = loadEvent.target.result;
         this.cropper.setImage(image);
@@ -57,7 +50,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {}
 
   public handleImage(webcamImage: WebcamImage): void {
-    console.log('received webcam image', webcamImage);
     this.webcamImage = webcamImage;
 
     var image = new Image();
@@ -67,6 +59,10 @@ export class HomeComponent implements OnInit {
       this.cropper.setImage(image);
       this.store.dispatch(new MoveStep('cropping-image'))
     }
+  }
+
+  public handleInitError(){
+
   }
 
   public triggerSnapshot(): void {
@@ -81,32 +77,10 @@ export class HomeComponent implements OnInit {
     this.store.dispatch(new MoveStep('uploading-cropped-image'))
 
     //TODO: USE RXJS
-    const thumbsResult = {
-      date: new Date(),
-      title: 'New Thumbs',
-      files: [
-        {
-          name: 'Original',
-          url: 'https://cdn.newsapi.com.au/image/v1/67a523605bca40778c6faaad93883a3b'
-        },
-        {
-          name: '400x300',
-          url: 'https://cdn.newsapi.com.au/image/v1/67a523605bca40778c6faaad93883a3b'
-        },
-        {
-          name: '160x120',
-          url: 'https://cdn.newsapi.com.au/image/v1/67a523605bca40778c6faaad93883a3b'
-        },
-        {
-          name: '120x120',
-          url: 'https://cdn.newsapi.com.au/image/v1/67a523605bca40778c6faaad93883a3b'
-        }
-      ]
-    };
 
     setTimeout(() => {
       //this.thumbs.push(thumbsResult);
-      this.store.dispatch(new AddThumbsListItem(thumbsResult))
+      this.store.dispatch(new UploadFile(this.cropperImage.image))
     }, 500);
   }
 }

@@ -1,7 +1,8 @@
 <div class="container" fxLayout="column" fxLayoutAlign="start start" style="min-height: 500px;">
   <h2 class="mat-h2">Thumbnails Creator</h2>
   <div fxFill fxFlex="100%" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutAlign="start start" fxLayoutGap="20px">
-    <mat-card fxFill fxFlex="100%">
+
+    <mat-card fxFlex fxFill>
       <mat-card-content>
         <div [ngSwitch]="(home$ | async).step">
           <!-- STEP: Selecting File -->
@@ -47,36 +48,8 @@
         </div>
 
       </mat-card-content>
-
     </mat-card>
 
-    <div fxFlex="100%" fxLayout="column" fxLayoutAlign="start start">
-      <h3 class="mat-h3">Your Thumbnails:</h3>
-      <p class="mat-h4" *ngIf="!(home$ | async).thumbs.length">Your thumbs will appear here.</p>
-      <mat-accordion fxFlex="100%" fxFill *ngIf="(home$ | async).thumbs.length">
-
-        <mat-expansion-panel fxFlex="100%" fxFill  *ngFor="let thumb of (home$ | async).thumbs; let i = index">
-
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <img style="display: block; max-height: 30px; max-width: 30px;" [src]="thumb.files[3].url" alt="">
-            </mat-panel-title>
-            <mat-panel-description>
-              {{ thumb.title }}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-
-          <div fxFlex="100%" fxFill fxLayout="column">
-            <mat-list>
-              <mat-list-item *ngFor="let file of thumb.files; let i = index">
-                <a [href]="file.url" target="_blank"> {{file.name}}</a>
-              </mat-list-item>
-            </mat-list>
-          </div>
-        </mat-expansion-panel>
-
-
-      </mat-accordion>
-    </div>
+    <thumbs-list fxFlex fxFill></thumbs-list>
   </div>
 </div>

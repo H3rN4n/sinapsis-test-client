@@ -27,7 +27,7 @@ import { AppRoutingModule } from './app-routing.module';
     TranslateModule.forRoot(),
     BrowserAnimationsModule,
     MaterialModule,
-    NgxsModule.forRoot([]),
+    NgxsModule.forRoot([], { developmentMode: true }),
     CoreModule,
     SharedModule,
     ShellModule,

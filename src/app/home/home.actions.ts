@@ -9,3 +9,8 @@ export class AddThumbsListItem {
   static readonly type = '[Home] Add Thumbs List Item';
   constructor(public item: ThumbsItem) {}
 }
+
+export class UploadFile {
+  static readonly type = '[Home] Upload File';
+  constructor(public file: any) {}
+}
