@@ -1,3 +1,4 @@
+import { HomeService } from './home.service';
 import { MoveStep, AddThumbsListItem, UploadFile } from './home.actions';
 import { State, Action, StateContext } from '@ngxs/store';
 import { CropperSettings } from 'ngx-img-cropper';
@@ -28,6 +29,11 @@ const defaultCropperSetting = function() {
 })
 
 export class HomeState {
+
+  constructor(private homeService: HomeService){
+
+  }
+
   @Action(MoveStep)
   MoveStep(ctx: StateContext<HomeModel>, action: MoveStep) {
     const state = ctx.getState();
@@ -42,7 +48,9 @@ export class HomeState {
     const state = ctx.getState();
 
     //upload service
-
+    this.homeService.callApi(action.file).subscribe((result)=>{
+      console.log(result)
+    })
     // ctx.setState({
     //   ...state,
     //   thumbs: state.thumbs.concat(action.file)

@@ -5,9 +5,9 @@ LABEL Name = Sinapsis Technical Angular App
 
 WORKDIR /home/app
 
-ADD package.json /home/app
+COPY package.json /home/app
 RUN npm install
-ADD . /home/app
+COPY . /home/app
 
 CMD ["npm", "start"]
 

@@ -17,6 +17,7 @@ import { ThumbsListComponent } from './thumbs-list/thumbs-list.component';
 import { ThumbsListItemComponent } from './thumbs-list-item/thumbs-list-item.component';
 
 import { HomeState } from './home.state';
+import { HomeService } from './home.service';
 
 @NgModule({
   imports: [
@@ -33,6 +34,6 @@ import { HomeState } from './home.state';
     WebcamModule
   ],
   declarations: [HomeComponent, ThumbsListComponent, ThumbsListItemComponent],
-  providers: []
+  providers: [HomeService]
 })
 export class HomeModule {}
