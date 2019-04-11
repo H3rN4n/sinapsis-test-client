@@ -60,6 +60,7 @@
     "@angular/language-service": "^7.0.0",
     "@biesbjerg/ngx-translate-extract": "^2.3.4",
     "@ngx-rocket/scripts": "^3.0.0",
+    "@ngxs/devtools-plugin": "^3.4.3",
     "@types/jasmine": "^2.8.7",
     "@types/jasminewd2": "^2.0.2",
     "@types/lodash": "^4.14.108",

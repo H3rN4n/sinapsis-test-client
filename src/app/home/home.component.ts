@@ -16,6 +16,7 @@ import { ThumbsItem, HomeModel } from './home.models';
 export class HomeComponent implements OnInit {
   @ViewChild('cropper', undefined)
   cropper: ImageCropperComponent;
+  thumbsTitle: string;
 
   @Select(HomeState) home$: Observable<HomeModel>;
 
@@ -25,6 +26,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private store: Store) {
     this.cropperImage = {};
+    this.thumbsTitle = "New Awesome Image";
   }
 
   moveStep(moveTo: string){
@@ -80,7 +82,7 @@ export class HomeComponent implements OnInit {
 
     setTimeout(() => {
       //this.thumbs.push(thumbsResult);
-      this.store.dispatch(new UploadFile(this.cropperImage.image))
+      this.store.dispatch(new UploadFile(this.thumbsTitle, this.cropperImage.image))
     }, 500);
   }
 }

@@ -11,6 +11,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { WebcamModule } from 'ngx-webcam';
+import { FormsModule } from '@angular/forms';
 
 import { HomeComponent } from './home.component';
 import { ThumbsListComponent } from './thumbs-list/thumbs-list.component';
@@ -31,7 +32,8 @@ import { HomeService } from './home.service';
     NgxDropzoneModule,
     NgxsModule.forFeature([HomeState]),
     ImageCropperModule,
-    WebcamModule
+    WebcamModule,
+    FormsModule
   ],
   declarations: [HomeComponent, ThumbsListComponent, ThumbsListItemComponent],
   providers: [HomeService]

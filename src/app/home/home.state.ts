@@ -27,12 +27,8 @@ const defaultCropperSetting = function() {
     }
   }
 })
-
 export class HomeState {
-
-  constructor(private homeService: HomeService){
-
-  }
+  constructor(private homeService: HomeService) {}
 
   @Action(MoveStep)
   MoveStep(ctx: StateContext<HomeModel>, action: MoveStep) {
@@ -48,39 +44,17 @@ export class HomeState {
     const state = ctx.getState();
 
     //upload service
-    this.homeService.callApi(action.file).subscribe((result)=>{
-      console.log(result)
-    })
-    // ctx.setState({
-    //   ...state,
-    //   thumbs: state.thumbs.concat(action.file)
-    // });
-    //then
+    this.homeService.createThumbs(action.title, action.file).subscribe((result: any) => {
+      console.log(result);
 
-    const thumbsResult = {
-      date: new Date(),
-      title: 'New Thumbs',
-      files: [
-        {
-          name: 'Original',
-          url: action.file
-        },
-        {
-          name: '400x300',
-          url: action.file
-        },
-        {
-          name: '160x120',
-          url: action.file
-        },
-        {
-          name: '120x120',
-          url: action.file
-        }
-      ]
-    };
+      const thumbsResult = {
+        date: new Date(),
+        title: result.title,
+        files: result.files
+      };
 
-    return ctx.dispatch(new AddThumbsListItem(thumbsResult));
+      return ctx.dispatch(new AddThumbsListItem(thumbsResult));
+    });
   }
 
   @Action(AddThumbsListItem)
@@ -93,5 +67,4 @@ export class HomeState {
 
     return ctx.dispatch(new MoveStep('selecting-file'));
   }
-
 }

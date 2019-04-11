@@ -7,5 +7,6 @@ export const environment = {
   serverUrl: 'https://8yj66r5cld.execute-api.us-east-1.amazonaws.com/dev/',
   defaultLanguage: 'en-US',
   supportedLanguages: ['en-US', 'fr-FR'],
-  auth0CallbackUrl: "http://sinapsis-test.s3-website-us-east-1.amazonaws.com/callback"
+  auth0CallbackUrl: "http://sinapsis-test.s3-website-us-east-1.amazonaws.com/callback",
+  lambdaApiUrl: "https://78upvegdw4.execute-api.us-east-1.amazonaws.com/dev"
 };

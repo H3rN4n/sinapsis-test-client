@@ -32,6 +32,9 @@
 
           <!-- STEP: Previewing Cropped Image -->
           <div *ngSwitchCase="'previewing-cropped-image'">
+            <mat-form-field fxFill>
+              <input matInput placeholder="Thumbs Title" [(ngModel)]="thumbsTitle">
+            </mat-form-field>
             <img [src]="cropperImage.image" [width]="(home$ | async).cropper.settings.croppedWidth"
               [height]="(home$ | async).cropper.settings.croppedHeight" />
             <button mat-raised-button fxFill (click)="uploadCroppedImage()">Generate Thumbs</button>

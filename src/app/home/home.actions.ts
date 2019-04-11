@@ -12,5 +12,5 @@ export class AddThumbsListItem {
 
 export class UploadFile {
   static readonly type = '[Home] Upload File';
-  constructor(public file: any) {}
+  constructor(public title: string, public file: any) {}
 }

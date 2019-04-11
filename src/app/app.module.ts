@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 import { environment } from '@env/environment';
 import { CoreModule } from '@app/core';
@@ -28,6 +29,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
     MaterialModule,
     NgxsModule.forRoot([], { developmentMode: true }),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
     CoreModule,
     SharedModule,
     ShellModule,
